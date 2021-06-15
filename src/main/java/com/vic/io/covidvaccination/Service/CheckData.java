@@ -21,79 +21,78 @@ public class CheckData {
     @Autowired
     private SendNotification notification;
 
-//    public void validate() {
-//        List<Centers> centers = new ArrayList<>();
-//        List<User> userList = userRepo.findAll();
-//
-//        for (User user : userList) {
-//            System.out.println(user.toString());
-//            centers = getData.getAvailablity(user.getDistrict_id());
-//            for (Centers centers1 : centers) {
-//                if (centers1.getFee_type().equals(user.getFee())) {
-//                    for (SessionList sessionList : centers1.getSessions()) {
-//                        if (sessionList.getMin_age_limit() >= user.getAge()) {
-//                            if (user.getDosageType() == 1 && sessionList.getAvailable_capacity_dose1() != 0) {
-////                                notification.snd(user, centers1, sessionList);
-//                            } else if (user.getDosageType() == 2 && sessionList.getAvailable_capacity_dose2() != 0) {
-//                                notification.snd(user, centers1, sessionList);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    public List<Centers> checkAvailability() {
-        List<Centers> centers = new ArrayList<>();
-        List<Centers> filteredCenter=new ArrayList<>();
-
-        List<SessionList> sessionLists = new ArrayList<>();
-        List<User> userList = userRepo.findAll();
-
-        for (User user : userList) {
-            System.out.println(user.toString());
-            centers = getData.getAvailablity(user.getDistrict_id());
-            for (Centers centers1 : centers) {
-                if (centers1.getFee_type().equals(user.getFee()) && centers1.getPincode() == user.getPincode()) {
-                    for (SessionList sessionList : centers1.getSessions()) {
-                        if (sessionList.getMin_age_limit() >= user.getAge() &&
-                                sessionList.getVaccine().equals(user.getVaccine()) &&
-                                sessionList.getAvailable_capacity_dose1() != 0) {
-
-                            sessionLists.add(sessionList);
-
-                        }
-                    }
-                    if (!sessionLists.isEmpty()) {
-                        centers1.setSessions(sessionLists);
-                        filteredCenter.add(centers1);
-//                        System.out.println(centers1);
-                    }
-                }
-            }
-
-        }
-        filteredCenter.forEach(System.out::println);
-        return filteredCenter;
-    }
 
     public List<Centers> test(User user){
-        List<Centers> centers = new ArrayList<>();
-        List<Centers> centersList= new ArrayList<>();
+        List<Centers> centers;
+        List<Centers> centersList;
+        List<Centers> centersList1= new ArrayList<>();
+
 
         centers = getData.getAvailablity(user.getDistrict_id());
+
         centersList= centers.stream()
                 .parallel()
                 .filter(centers1 -> centers1.getFee_type().equals(user.getFee()))
-                .filter(centers1 -> centers1.getSessions()
-                        .stream()
-                        .anyMatch(sessionList -> sessionList.getAvailable_capacity_dose2()!=0))
+                .filter(centers1 -> centers1.getPincode()== user.getPincode())
                 .collect(Collectors.toList());
 
+//        for (Centers centers1:centersList){
+//
+//            List<SessionList> collect = centers1.getSessions()
+//                    .stream()
+//                    .parallel()
+//                    .filter(sessionList -> sessionList.getMin_age_limit() <= user.getAge())
+//                    .filter(sessionList -> sessionList.getVaccine().equals(user.getVaccine()))
+//                    .filter(sessionList -> sessionList.getAvailable_capacity_dose2()>=1)
+//                    .collect(Collectors.toList());
+//            if(user.getDosageType()==1){
+//                collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose1()!=0).collect(Collectors.toList());
+//            }else {
+//                collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose2()!=0).collect(Collectors.toList());
+//            }
+//
+//            if (!collect.isEmpty()) {
+//                centers1.setSessions(collect);
+//                centersList1.add(centers1);
+//            }
+//
+//        }
 
-        centersList.forEach(System.out::println);
-        return centersList;
+        centersList1=filterCenter(centersList,user);
+
+    if (centersList1.isEmpty() && !centers.isEmpty()){
+       centersList1=filterCenter(centers,user);
+    }
+
+       centersList1.forEach(System.out::println);
+        return centersList1;
+
+    }
+
+    private List<Centers> filterCenter(List<Centers> centersList,User user){
+        List<Centers> centersList1= new ArrayList<>();
+        for (Centers centers1:centersList){
+
+            List<SessionList> collect = centers1.getSessions()
+                    .stream()
+                    .parallel()
+                    .filter(sessionList -> sessionList.getMin_age_limit() <= user.getAge())
+                    .filter(sessionList -> sessionList.getVaccine().equals(user.getVaccine()))
+                    .filter(sessionList -> sessionList.getAvailable_capacity_dose2()>=1)
+                    .collect(Collectors.toList());
+            if(user.getDosageType()==1){
+                collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose1()!=0).collect(Collectors.toList());
+            }else {
+                collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose2()!=0).collect(Collectors.toList());
+            }
+
+            if (!collect.isEmpty()) {
+                centers1.setSessions(collect);
+                centersList1.add(centers1);
+            }
+
+        }
+        return centersList1;
 
     }
 }

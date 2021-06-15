@@ -52,16 +52,12 @@ public class CovidvaccinationApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        List<Centers> centers = getData.getAvailablity("296");
+
         List<User> userList=userRepo.findAll();
-//        System.out.println("centers");
-//        centers.forEach(System.out::println);
-//        checkData.checkAvailability();
-//        System.out.println("centers");
+
         for (User user:userList){
             System.out.println(user.toString());
            checkData.test(user);
-//
         }
 
     }

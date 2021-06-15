@@ -34,53 +34,25 @@ public class getData {
 
 
 
-//   public List<Centers> checkAvailablity(String district_id){
-//        List<Centers> centersList=this.getDetails(district_id);
-//        List<Centers> centersList1=new ArrayList<>();
-//        for(Centers centers1:centersList){
-//            System.out.println(centers1.getName());
-//            List<SessionList> collect = centers1.getSessions()
-//                    .stream()
-//                    .filter(sessionList -> sessionList.getAvailable_capacity() >= 1)
-//                    .collect(Collectors.toList());
-//            collect.forEach(System.out::println);
-//
-//
-//            for (SessionList sessionList : centers1.getSessions()){
-//              if (sessionList.getAvailable_capacity()>= 1){
-//                  centers1.setSessions(collect);
-//                  centersList1.add(centers1);
-//                  break;
-//              }
-//          }
-//      }
-//        return centersList1;
-//   }
-
    public List<Centers> getAvailablity(String district_id){
         List<Centers> centers=getDetails(district_id);
-//        centers.forEach(System.out::println);
        List<Centers> centersList1=new ArrayList<>();
-
 
        for (Centers centers1:centers){
             List<SessionList> sessionLists=centers1.getSessions();
             List<SessionList> collect = sessionLists.stream()
                     .filter(sessionList -> sessionList.getAvailable_capacity() >= 1)
                     .collect(Collectors.toList());
-//            collect.forEach(System.out::println);
 
             if (!collect.isEmpty()){
                 centers1.setSessions(collect);
                 centersList1.add(centers1);
-            }else {
-//                System.out.println("couldnt find a center");
             }
         }
 //       System.out.println("################");
 //       centersList1.forEach(System.out::println);
 //       System.out.println("################");
-//
+
 
        return centersList1;
    }
