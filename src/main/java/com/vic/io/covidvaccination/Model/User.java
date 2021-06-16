@@ -7,6 +7,9 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -23,6 +26,10 @@ public class User {
     private int dosageType;
     private String vaccine;
     private int Pincode;
+    private List<Centers> AvailableCenters;
+    private boolean enable;
+    private String from;
+    private String to;
 
     public User(String userName, String phoneNo, String district_id, String fee, int age, int dosageType,String vaccine,int pincode) {
         this.userName = userName;
@@ -33,5 +40,7 @@ public class User {
         this.dosageType = dosageType;
         this.vaccine=vaccine;
         this.Pincode=pincode;
+        this.AvailableCenters=new ArrayList<>();
+        this.enable=true;
     }
 }

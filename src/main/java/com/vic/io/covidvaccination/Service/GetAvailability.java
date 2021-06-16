@@ -7,28 +7,26 @@ import com.vic.io.covidvaccination.Repository.userRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// FIXME: 16/06/21 please send help
+
 @Service
-public class CheckData {
+public class GetAvailability {
     @Autowired
     private getData getData;
     @Autowired
     private userRepo userRepo;
-    @Autowired
-    private SendNotification notification;
 
-
-    public List<Centers> test(User user){
+    public List<Centers> getCenters(User user){
         List<Centers> centers;
         List<Centers> centersList;
-        List<Centers> centersList1= new ArrayList<>();
+        List<Centers> centersList1;
 
 
-        centers = getData.getAvailablity(user.getDistrict_id());
+        centers = getData.getAvailability(user.getDistrict_id());
 
         centersList= centers.stream()
                 .parallel()
@@ -36,35 +34,15 @@ public class CheckData {
                 .filter(centers1 -> centers1.getPincode()== user.getPincode())
                 .collect(Collectors.toList());
 
-//        for (Centers centers1:centersList){
-//
-//            List<SessionList> collect = centers1.getSessions()
-//                    .stream()
-//                    .parallel()
-//                    .filter(sessionList -> sessionList.getMin_age_limit() <= user.getAge())
-//                    .filter(sessionList -> sessionList.getVaccine().equals(user.getVaccine()))
-//                    .filter(sessionList -> sessionList.getAvailable_capacity_dose2()>=1)
-//                    .collect(Collectors.toList());
-//            if(user.getDosageType()==1){
-//                collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose1()!=0).collect(Collectors.toList());
-//            }else {
-//                collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose2()!=0).collect(Collectors.toList());
-//            }
-//
-//            if (!collect.isEmpty()) {
-//                centers1.setSessions(collect);
-//                centersList1.add(centers1);
-//            }
-//
-//        }
 
-        centersList1=filterCenter(centersList,user);
 
-    if (centersList1.isEmpty() && !centers.isEmpty()){
+    if (centersList.isEmpty() && !centers.isEmpty()){
        centersList1=filterCenter(centers,user);
+    }else {
+        centersList1=filterCenter(centersList,user);
     }
-
-       centersList1.forEach(System.out::println);
+        user.setAvailableCenters(centersList1);
+        userRepo.save(user);
         return centersList1;
 
     }
@@ -92,6 +70,7 @@ public class CheckData {
             }
 
         }
+
         return centersList1;
 
     }

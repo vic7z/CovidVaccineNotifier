@@ -18,23 +18,25 @@ import java.util.stream.Collectors;
 public class getData {
     @Autowired
     private RestTemplate restTemplate;
-    private LocalDate date=LocalDate.now();
-    DateTimeFormatter dataFormater = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private final LocalDate date=LocalDate.now();
+    DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 
     private String getByDistrict ="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict";
 
+    // FIXME: 17/06/21 Null Pointer Exception
+
     public List<Centers> getDetails(String district_id){
        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getByDistrict)
               .queryParam("district_id",district_id)
-              .queryParam("date",date.format(dataFormater));
-       List<Centers> centersList=restTemplate.getForObject(builder.toUriString(), Response.class).getCenters();
-        return centersList;
+              .queryParam("date",date.format(dataFormatter));
+        return restTemplate.getForObject(builder.toUriString(), Response.class).getCenters();
    }
 
 
+//check for available centers
 
-   public List<Centers> getAvailablity(String district_id){
+   public List<Centers> getAvailability(String district_id){
         List<Centers> centers=getDetails(district_id);
        List<Centers> centersList1=new ArrayList<>();
 
