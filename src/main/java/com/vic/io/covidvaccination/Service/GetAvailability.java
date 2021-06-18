@@ -3,6 +3,7 @@ package com.vic.io.covidvaccination.Service;
 import com.vic.io.covidvaccination.Model.Centers;
 import com.vic.io.covidvaccination.Model.SessionList;
 import com.vic.io.covidvaccination.Model.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 // FIXME: 16/06/21 please send help
 
 @Service
+@Log4j2
 public class GetAvailability {
     private final getData getData;
 
@@ -21,6 +23,8 @@ public class GetAvailability {
         this.getData = getData;
     }
 
+    // return the centers based on the given data
+    // works most of the time ig
 
     public List<Centers> getCenters(User user){
         List<Centers> centers;
@@ -36,14 +40,14 @@ public class GetAvailability {
                // .filter(centers1 -> centers1.getPincode()== user.getPincode())
                 .collect(Collectors.toList());
 
+        //log.info(user.getUserName() +" "+centersList);
 
+        if (centersList.isEmpty() && !centers.isEmpty()){
+            centersList1=filterCenter(centers,user);
+        }else {
+            centersList1=filterCenter(centersList,user);
+        }
 
-    if (centersList.isEmpty() && !centers.isEmpty()){
-       centersList1=filterCenter(centers,user);
-
-    }else {
-        centersList1=filterCenter(centersList,user);
-    }
         //please dont judge
         List<Centers> centersList2 = centersList1.stream().filter(centers1 -> centers1.getPincode() == user.getPincode()).collect(Collectors.toList());
 

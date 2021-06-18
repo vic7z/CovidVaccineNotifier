@@ -2,6 +2,7 @@ package com.vic.io.covidvaccination.Service;
 
 import com.vic.io.covidvaccination.Model.User;
 import com.vic.io.covidvaccination.Repository.userRepo;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -10,55 +11,54 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-// FIXME: 16/06/21 i have no idea
-
-
+@Log4j2
 @Service
 public class Scheduler {
+
+    private final GetAvailability getData;
     private final userRepo userRepo;
-    private final GetAvailability getAvailability;
     private final CenterCheck centerCheck;
 
     private final LocalDate date=LocalDate.now();
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Autowired
-    public Scheduler(userRepo userRepo, GetAvailability getAvailability, CenterCheck centerCheck) {
+    public Scheduler(GetAvailability getData, userRepo userRepo, CenterCheck centerCheck) {
+        this.getData = getData;
         this.userRepo = userRepo;
-        this.getAvailability = getAvailability;
         this.centerCheck = centerCheck;
     }
 
-    // FIXME: 18/06/21 lot of things to check
 
     @Scheduled(fixedDelay = 5_000)
-    public void checkData(){
+    public void check(){
         List<User> userList=userRepo.findAll();
+
         for (User user:userList){
-            user.setAvailableCenters(this.getAvailability.getCenters(user));
-            if (!user.getAvailableCenters().isEmpty()) {
-                if (LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)) {
-                    System.out.println(user.getUserName() + " date ok");
-                    if (!this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getAvailability.getCenters(user)))) {
-                        System.out.println(getAvailability.getCenters(user).size());
-                        if (!getAvailability.getCenters(user).isEmpty()) {
-                            user.setAvailableCenters(getAvailability.getCenters(user));
-                            user.setEnable(true);
-                            List<String> date = this.centerCheck.setDate(user);
-                            user.setFrom(date.get(0));
-                            user.setTo(date.get(date.size() - 1));
-                            userRepo.save(user);
-                            centerCheck.snd(user);
-                        } else {
-                            user.setEnable(false);
-                            userRepo.save(user);
-                        }
-                    }
-                }
-            }else {
-                user.setEnable(false);
+
+            if (user.getAvailableCenters().isEmpty()){
+               if (this.getData.getCenters(user).isEmpty()){
+                   log.info(user.getUserName()+": center empty");
+                   user.setEnable(false);
+               }else {
+                   user.setAvailableCenters(this.getData.getCenters(user));
+                   user.setEnable(true);
+                   log.info(user.getUserName()+": updated center    ");
+
+               }
                 userRepo.save(user);
+            }else if (user.isEnable() &&
+                    !this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getData.getCenters(user)))
+            && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)){
+                log.info(user.getUserName()+ " sending msg");
+                user.setAvailableCenters(this.getData.getCenters(user));
+                List<String> date = this.centerCheck.setDate(user);
+                user.setFrom(date.get(0));
+                user.setTo(date.get(date.size() - 1));
+                userRepo.save(user);
+                this.centerCheck.snd(user);
             }
+
         }
     }
 }

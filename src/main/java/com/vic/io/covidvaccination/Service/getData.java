@@ -30,7 +30,7 @@ public class getData {
 
     // FIXME: 17/06/21 Null Pointer Exception
 
-    public List<Centers> getDetails(String district_id){
+    private List<Centers> getDetails(String district_id){
        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getByDistrict)
               .queryParam("district_id",district_id)
               .queryParam("date",date.format(dataFormatter));
