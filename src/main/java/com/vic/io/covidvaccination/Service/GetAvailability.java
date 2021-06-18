@@ -3,7 +3,6 @@ package com.vic.io.covidvaccination.Service;
 import com.vic.io.covidvaccination.Model.Centers;
 import com.vic.io.covidvaccination.Model.SessionList;
 import com.vic.io.covidvaccination.Model.User;
-import com.vic.io.covidvaccination.Repository.userRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class GetAvailability {
+    private final getData getData;
+
     @Autowired
-    private getData getData;
-//    @Autowired
-//    private userRepo userRepo;
+    public GetAvailability(getData getData) {
+        this.getData = getData;
+    }
+
 
     public List<Centers> getCenters(User user){
         List<Centers> centers;

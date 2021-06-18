@@ -16,13 +16,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class getData {
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
     private final LocalDate date=LocalDate.now();
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 
     private String getByDistrict ="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict";
+
+    @Autowired
+    public getData(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     // FIXME: 17/06/21 Null Pointer Exception
 
@@ -51,9 +55,6 @@ public class getData {
                 centersList1.add(centers1);
             }
         }
-//       System.out.println("################");
-//       centersList1.forEach(System.out::println);
-//       System.out.println("################");
 
 
        return centersList1;
