@@ -4,6 +4,7 @@ import com.vic.io.covidvaccination.Model.Centers;
 import com.vic.io.covidvaccination.Model.User;
 import com.vic.io.covidvaccination.Repository.userRepo;
 import com.vic.io.covidvaccination.Service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @RestController
 @RequestMapping("/user")
 public class userController {
@@ -32,7 +34,6 @@ public class userController {
 
     @GetMapping(value = "/get-center",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Centers>> getCenters(@Param(value = "id") String id){
-        System.out.println(id);
         return this.userService.getCenter(id);
     }
     @DeleteMapping("/delete")

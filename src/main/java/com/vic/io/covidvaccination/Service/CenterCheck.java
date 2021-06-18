@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +20,16 @@ import java.util.stream.Collectors;
 @Service
 public class CenterCheck {
     private final Notify notify;
+    private final GetAvailability getAvailability;
+    private final LocalDate date=LocalDate.now();
+    DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private static final Logger log= LoggerFactory.getLogger(CenterCheck.class);
 
     @Autowired
-    public CenterCheck(Notify notify) {
+    public CenterCheck(Notify notify, GetAvailability getAvailability) {
         this.notify = notify;
+        this.getAvailability = getAvailability;
     }
 
     public void snd(User user){
@@ -54,5 +60,22 @@ public class CenterCheck {
         }
         return centreNames;
     }
+    public User setData(User user) {
+        log.info(user.getUserName());
+        if (!this.getAvailability.getCenters(user).isEmpty()) {
+            user.setAvailableCenters(this.getAvailability.getCenters(user));
+            List<String> date = setDate(user);
+            user.setFrom(date.get(0));
+            user.setTo(date.get(date.size() - 1));
+            snd(user);
+        }else {
+            log.info(user.getUserName()+" has no avilable centers");
+            user.setAvailableCenters(new ArrayList<>());
+            user.setFrom(date.format(dataFormatter));
+            user.setTo(date.format(dataFormatter));
+        }
+        return user;
+    }
+
 
 }

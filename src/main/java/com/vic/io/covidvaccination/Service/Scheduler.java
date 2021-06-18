@@ -44,21 +44,26 @@ public class Scheduler {
                    user.setAvailableCenters(this.getData.getCenters(user));
                    user.setEnable(true);
                    log.info(user.getUserName()+": updated center    ");
+                   snd(user);
 
                }
                 userRepo.save(user);
             }else if (user.isEnable() &&
                     !this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getData.getCenters(user)))
             && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)){
-                log.info(user.getUserName()+ " sending msg");
-                user.setAvailableCenters(this.getData.getCenters(user));
-                List<String> date = this.centerCheck.setDate(user);
-                user.setFrom(date.get(0));
-                user.setTo(date.get(date.size() - 1));
-                userRepo.save(user);
-                this.centerCheck.snd(user);
+                snd(user);
             }
 
         }
+    }
+
+    private void snd(User user) {
+        log.info(user.getUserName()+ " sending msg");
+        user.setAvailableCenters(this.getData.getCenters(user));
+        List<String> date = this.centerCheck.setDate(user);
+        user.setFrom(date.get(0));
+        user.setTo(date.get(date.size() - 1));
+        userRepo.save(user);
+        this.centerCheck.snd(user);
     }
 }
