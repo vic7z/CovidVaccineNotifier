@@ -33,7 +33,8 @@ public class GetAvailability {
                 .filter(centers1 -> centers1.getFee_type().equals(user.getFee()))
                // .filter(centers1 -> centers1.getPincode()== user.getPincode())
                 .collect(Collectors.toList());
-       System.out.println(centersList);
+
+
 
     if (centersList.isEmpty() && !centers.isEmpty()){
        centersList1=filterCenter(centers,user);
@@ -42,8 +43,8 @@ public class GetAvailability {
         centersList1=filterCenter(centersList,user);
     }
         //please dont judge
-
         List<Centers> centersList2 = centersList1.stream().filter(centers1 -> centers1.getPincode() == user.getPincode()).collect(Collectors.toList());
+
         if (centersList2.isEmpty()){
             return centersList1;
         }else {

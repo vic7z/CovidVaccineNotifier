@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,9 @@ public class UserService {
     private final userRepo userRepo;
     private final CenterCheck notification;
     private final Notify notify;
+    private final LocalDate date=LocalDate.now();
+    DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 
     @Autowired
     public UserService(userRepo userRepo, CenterCheck notification, Notify notify) {
@@ -30,7 +35,6 @@ public class UserService {
 
         if (user.isEmpty()){
             userRepo.save(newUser);
-
             return ResponseEntity.ok(newUser);
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
