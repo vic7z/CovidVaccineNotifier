@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class GetAvailability {
     @Autowired
     private getData getData;
-    @Autowired
-    private userRepo userRepo;
+//    @Autowired
+//    private userRepo userRepo;
 
     public List<Centers> getCenters(User user){
         List<Centers> centers;
@@ -31,19 +31,24 @@ public class GetAvailability {
         centersList= centers.stream()
                 .parallel()
                 .filter(centers1 -> centers1.getFee_type().equals(user.getFee()))
-                .filter(centers1 -> centers1.getPincode()== user.getPincode())
+               // .filter(centers1 -> centers1.getPincode()== user.getPincode())
                 .collect(Collectors.toList());
-
-
+       System.out.println(centersList);
 
     if (centersList.isEmpty() && !centers.isEmpty()){
        centersList1=filterCenter(centers,user);
+
     }else {
         centersList1=filterCenter(centersList,user);
     }
-        user.setAvailableCenters(centersList1);
-        userRepo.save(user);
-        return centersList1;
+        //please dont judge
+
+        List<Centers> centersList2 = centersList1.stream().filter(centers1 -> centers1.getPincode() == user.getPincode()).collect(Collectors.toList());
+        if (centersList2.isEmpty()){
+            return centersList1;
+        }else {
+            return centersList2;
+        }
 
     }
 

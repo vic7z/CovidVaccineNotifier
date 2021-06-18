@@ -2,6 +2,7 @@ package com.vic.io.covidvaccination.Service;
 
 import com.vic.io.covidvaccination.Model.Centers;
 import com.vic.io.covidvaccination.Model.User;
+import com.vic.io.covidvaccination.Notification.Notify;
 import com.vic.io.covidvaccination.Repository.userRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +16,13 @@ import java.util.Optional;
 public class UserService {
     private final userRepo userRepo;
     private final CenterCheck notification;
+    private final Notify notify;
 
     @Autowired
-    public UserService(userRepo userRepo, CenterCheck notification) {
+    public UserService(userRepo userRepo, CenterCheck notification, Notify notify) {
         this.userRepo = userRepo;
         this.notification = notification;
+        this.notify=notify;
     }
 
     public ResponseEntity<User> setUser(User newUser){
@@ -27,7 +30,7 @@ public class UserService {
 
         if (user.isEmpty()){
             userRepo.save(newUser);
-            notification.snd(newUser);
+
             return ResponseEntity.ok(newUser);
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -37,7 +40,12 @@ public class UserService {
 
     public ResponseEntity<List<Centers>> getCenter(String id) {
         Optional<User> user=userRepo.findById(id);
-        return user.map(value -> ResponseEntity.ok(value.getAvailableCenters())).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+//        return user.map(value -> ResponseEntity.ok(value.getAvailableCenters())).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+        if (user.isPresent()){
+            return  ResponseEntity.ok(user.get().getAvailableCenters());
+        }else {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     public ResponseEntity<Void> deleteByPhone(String s) {

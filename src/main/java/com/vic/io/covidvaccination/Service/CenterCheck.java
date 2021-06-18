@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+// TODO: 18/06/21
 
 @Service
 public class CenterCheck {
@@ -29,19 +32,22 @@ public class CenterCheck {
             setDate(user);
 
         }
+        return;
     }
 
-    private void setDate(User user){
+    public List<String> setDate(User user){
         List<String> dates=new ArrayList<>();
         for (Centers centers1: user.getAvailableCenters()){
             for (SessionList sessionList: centers1.getSessions()){
                 dates.add(sessionList.getDate());
             }
         }
-        System.out.println(dates.stream().distinct().sorted());
+       // System.out.println(dates.stream().distinct().sorted().collect(Collectors.toList()));
+        return (dates.stream().distinct().sorted().collect(Collectors.toList()));
+
     }
 
-    private List<String> extractName(List<Centers> centers){
+    public List<String> extractName(List<Centers> centers){
         List<String> centreNames=new ArrayList<>();
         for (Centers centers1:centers){
             centreNames.add(centers1.getName());
