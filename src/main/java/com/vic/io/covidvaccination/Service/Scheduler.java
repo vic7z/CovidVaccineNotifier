@@ -3,6 +3,7 @@ package com.vic.io.covidvaccination.Service;
 import com.vic.io.covidvaccination.Model.User;
 import com.vic.io.covidvaccination.Repository.userRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,14 +29,35 @@ public class Scheduler {
         this.centerCheck = centerCheck;
     }
 
-    private void checkData(){
+    // FIXME: 18/06/21 lot of things to check
+
+    @Scheduled(fixedDelay = 5_000)
+    public void checkData(){
         List<User> userList=userRepo.findAll();
         for (User user:userList){
-            if (user.getAvailableCenters().equals(getAvailability.getCenters(user))){
-                if (LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)){
-                    user.setEnable(true);
-                    centerCheck.snd(user);
+            user.setAvailableCenters(this.getAvailability.getCenters(user));
+            if (!user.getAvailableCenters().isEmpty()) {
+                if (LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)) {
+                    System.out.println(user.getUserName() + " date ok");
+                    if (!this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getAvailability.getCenters(user)))) {
+                        System.out.println(getAvailability.getCenters(user).size());
+                        if (!getAvailability.getCenters(user).isEmpty()) {
+                            user.setAvailableCenters(getAvailability.getCenters(user));
+                            user.setEnable(true);
+                            List<String> date = this.centerCheck.setDate(user);
+                            user.setFrom(date.get(0));
+                            user.setTo(date.get(date.size() - 1));
+                            userRepo.save(user);
+                            centerCheck.snd(user);
+                        } else {
+                            user.setEnable(false);
+                            userRepo.save(user);
+                        }
+                    }
                 }
+            }else {
+                user.setEnable(false);
+                userRepo.save(user);
             }
         }
     }

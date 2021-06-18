@@ -35,7 +35,7 @@ public class User {
         this.userName = userName;
         this.phoneNo = phoneNo;
         this.district_id = district_id;
-        Fee = fee;
+        this.Fee = fee;
         this.age = age;
         this.dosageType = dosageType;
         this.vaccine=vaccine;
