@@ -27,7 +27,7 @@ jobs:
       env:
         client:${{secrets.CLIENT}}
         key:${{secrets.KEY}}
-        KEYVAULT:${{secrets.KEYVAULT}}
+        Keyvault:${{secrets.KEYVAULT}}
         tenant:${{secrets.TENANT}}
 
     - name: Upload artifact for deployment job
