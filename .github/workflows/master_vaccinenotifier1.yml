@@ -2,11 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy JAR app to Azure Web App - vaccinenotifier1
-env:
-        client:${{CLIENT}}
-        key:${{KEY}}
-        KEYVAULT:${{KEYVAULT}}
-        tenant:${{TENANT}}
+
 on:
   push:
     branches:
@@ -27,9 +23,6 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install
-     
-        
-        
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
@@ -56,5 +49,5 @@ jobs:
       with:
         app-name: 'vaccinenotifier1'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_af3faedcb9864d1393e172cff8ed2cbc }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_7cda94162bbd4410b4d66c5e5f87a663 }}
         package: '*.jar'
