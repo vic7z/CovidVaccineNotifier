@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // TODO: 18/06/21
+// TODO: 23/06/21 lot of clean up 
 
 @Service
 public class CenterCheck {
@@ -33,11 +34,11 @@ public class CenterCheck {
     }
 
     public void snd(User user){
-        if (user.isEnable()) {
+       // if (user.isEnable()) {
             notify.SendSms(user);
             setDate(user);
 
-        }
+       // }
         return;
     }
 
@@ -67,13 +68,13 @@ public class CenterCheck {
             List<String> date = setDate(user);
             user.setFrom(date.get(0));
             user.setTo(date.get(date.size() - 1));
-            snd(user);
         }else {
             log.info(user.getUserName()+" has no avilable centers");
             user.setAvailableCenters(new ArrayList<>());
             user.setFrom(date.format(dataFormatter));
             user.setTo(date.format(dataFormatter));
         }
+        snd(user);
         return user;
     }
 

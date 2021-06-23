@@ -38,7 +38,7 @@ public class Scheduler {
 
             if (user.getAvailableCenters().isEmpty()){
                if (this.getData.getCenters(user).isEmpty()){
-                   log.info(user.getUserName()+": center empty");
+                   //log.info(user.getUserName()+": center empty");
                    user.setEnable(false);
                }else {
                    user.setAvailableCenters(this.getData.getCenters(user));

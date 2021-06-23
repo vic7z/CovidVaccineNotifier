@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 // FIXME: 16/06/21 please send help
 
+// FIXME: 23/06/21  API already exist for this things :/
+
 @Service
 @Log4j2
 public class GetAvailability {
@@ -34,11 +36,17 @@ public class GetAvailability {
 
         centers = getData.getAvailability(user.getDistrict_id());
 
-        centersList= centers.stream()
-                .parallel()
-                .filter(centers1 -> centers1.getFee_type().equals(user.getFee()))
-               // .filter(centers1 -> centers1.getPincode()== user.getPincode())
-                .collect(Collectors.toList());
+        if(user.getFee().equals("Paid")){
+            centersList= centers;
+
+        }else {
+            centersList= centers.stream()
+                    .parallel()
+                    .filter(centers1 -> centers1.getFee_type().equals("Free"))
+                    .collect(Collectors.toList());
+        }
+
+
 
         //log.info(user.getUserName() +" "+centersList);
 
@@ -61,15 +69,24 @@ public class GetAvailability {
 
     private List<Centers> filterCenter(List<Centers> centersList,User user){
         List<Centers> centersList1= new ArrayList<>();
+        List<SessionList> collect=new ArrayList<>();
         for (Centers centers1:centersList){
-
-            List<SessionList> collect = centers1.getSessions()
-                    .stream()
-                    .parallel()
-                    .filter(sessionList -> sessionList.getMin_age_limit() <= user.getAge())
-                    .filter(sessionList -> sessionList.getVaccine().equals(user.getVaccine()))
-                    .filter(sessionList -> sessionList.getAvailable_capacity_dose2()>=1)
-                    .collect(Collectors.toList());
+            if (!user.getVaccine().equalsIgnoreCase("any")) {
+                collect = centers1.getSessions()
+                        .stream()
+                        .parallel()
+                        .filter(sessionList -> sessionList.getMin_age_limit() <= user.getAge())
+                        .filter(sessionList -> sessionList.getVaccine().equalsIgnoreCase(user.getVaccine()))
+                        //.filter(sessionList -> sessionList.getAvailable_capacity_dose2()>=1)
+                        .collect(Collectors.toList());
+            }else {
+                collect = centers1.getSessions()
+                        .stream()
+                        .parallel()
+                        .filter(sessionList -> sessionList.getMin_age_limit() <= user.getAge())
+                       // .filter(sessionList -> sessionList.getVaccine().equalsIgnoreCase(user.getVaccine()))
+                        .collect(Collectors.toList());
+            }
             if(user.getDosageType()==1){
                 collect=collect.stream().filter(sessionList -> sessionList.getAvailable_capacity_dose1()!=0).collect(Collectors.toList());
             }else {

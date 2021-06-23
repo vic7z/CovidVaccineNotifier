@@ -1,7 +1,10 @@
 package com.vic.io.covidvaccination.Notification;
 
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import com.vic.io.covidvaccination.Model.SessionList;
 import com.vic.io.covidvaccination.Model.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 // TODO: 18/06/21 implement twilio api
 
 @Service
+@Log4j2
 public class Notify {
 
     private final TwilioConfig twilioConfig;
@@ -19,14 +23,21 @@ public class Notify {
     }
 
     public boolean SendSms(User user){
-        if (user.isEnable() && !user.getAvailableCenters().isEmpty()){
+        if (!user.getAvailableCenters().isEmpty()){
             String message=user.getAvailableCenters().size() +" vaccination centers found for "+
                     (user.getDosageType()==1?"1st":"2nd") +" dose "+ user.getUserName()+" \n"+
                     "centers :\n" +this.centerDetails(user);
             user.setEnable(false);
-            System.out.println(message);
+//            Message.creator(new PhoneNumber(user.getPhoneNo()),
+//                    new PhoneNumber(twilioConfig.getMyNumber()),message)
+//                    .create();
+            log.info(message);
       }else {
-            System.out.println("nothing to snd");
+//            Message.creator(new PhoneNumber(user.getPhoneNo()),
+//                    new PhoneNumber(twilioConfig.getMyNumber()),"No centers were found")
+//                    .create();
+            log.info("no centers where found");
+
         }
         return true;
     }
