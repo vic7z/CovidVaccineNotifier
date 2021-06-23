@@ -2,7 +2,11 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy JAR app to Azure Web App - vaccinenotifier1
-
+ env:
+        client:${{CLIENT}}
+        key:${{KEY}}
+        KEYVAULT:${{KEYVAULT}}
+        tenant:${{TENANT}}
 on:
   push:
     branches:
@@ -23,11 +27,7 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install
-      env:
-        client:${{CLIENT}}
-        key:${{KEY}}
-        KEYVAULT:${{KEYVAULT}}
-        tenant:${{TENANT}}
+     
         
         
 
