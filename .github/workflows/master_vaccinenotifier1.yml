@@ -25,6 +25,11 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install
+      env:
+        client: ${{secrets.CLIENT}}
+        key: ${{secrets.KEY}}
+        Keyvault: ${{secrets.KEYVAULT}}
+        tenant: ${{secrets.TENANT}}
 
     - name: Run Azure webapp deploy action using publish profile credentials
       uses: azure/webapps-deploy@v2
