@@ -1,6 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://go.microsoft.com/fwlink/?linkid=2134798
 # More GitHub Actions for Azure: https://go.microsoft.com/fwlink/?linkid=2135048
 
+
 name: Azure App Service - vaccinenotifier1(Production), Build and deploy Spring app
 
 on:
