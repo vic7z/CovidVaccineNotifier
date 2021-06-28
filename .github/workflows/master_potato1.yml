@@ -23,6 +23,12 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install
+      env:
+        client: ${{secrets.CLIENT}}
+        key: ${{secrets.KEY}}
+        Keyvault: ${{secrets.KEYVAULT}}
+        tenant: ${{secrets.TENANT}}
+      
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
