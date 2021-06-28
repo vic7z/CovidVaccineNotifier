@@ -97,7 +97,6 @@ public class GetAvailability {
                 centers1.setSessions(collect);
                 centersList1.add(centers1);
             }
-
         }
 
         return centersList1;
