@@ -23,12 +23,6 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install
-      env:
-        client: ${{secrets.CLIENT}}
-        key: ${{secrets.KEY}}
-        Keyvault: ${{secrets.KEYVAULT}}
-        tenant: ${{secrets.TENANT}}
-      
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
@@ -55,5 +49,5 @@ jobs:
       with:
         app-name: 'potato1'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e9ee873634ae469d8c06ca7e66b36c38 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e38790d7b27b4ed8b70ccb9564a8a83f }}
         package: '*.jar'
