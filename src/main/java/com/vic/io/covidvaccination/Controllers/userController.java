@@ -41,7 +41,7 @@ public class userController {
             return this.userService.deleteByPhone(phoneNo.get());
 
     }
-    
+
 //    @GetMapping(value = "/get",produces = MediaType.APPLICATION_JSON_VALUE)
 //    public List<User> getUser(){
 //        return userRepo.findAll();

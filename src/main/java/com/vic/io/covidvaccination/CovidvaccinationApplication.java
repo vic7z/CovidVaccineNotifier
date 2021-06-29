@@ -1,5 +1,6 @@
 package com.vic.io.covidvaccination;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 
 @EnableScheduling
-public class CovidvaccinationApplication  {
+public class CovidvaccinationApplication {
 
 
     @Bean

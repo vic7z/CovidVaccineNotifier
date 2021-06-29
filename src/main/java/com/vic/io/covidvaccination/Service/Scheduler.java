@@ -38,7 +38,7 @@ public class Scheduler {
 
             if (user.getAvailableCenters().isEmpty()){
                if (this.getData.getCenters(user).isEmpty()){
-                   //log.info(user.getUserName()+": center empty");
+                   log.info(user.getUserName()+": center empty");
                    user.setEnable(false);
                }else {
                    user.setAvailableCenters(this.getData.getCenters(user));
@@ -61,8 +61,8 @@ public class Scheduler {
         log.info(user.getUserName()+ " sending msg");
         user.setAvailableCenters(this.getData.getCenters(user));
         List<String> date = this.centerCheck.setDate(user);
-        user.setFrom(date.get(0));
-        user.setTo(date.get(date.size() - 1));
+        user.setFrom(date.get(date.size() - 1));
+        user.setTo(date.get(0));
         userRepo.save(user);
         this.centerCheck.snd(user);
     }

@@ -17,26 +17,32 @@
         <java.version>11</java.version>
         <azure.version>3.5.0</azure.version>
     </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.twilio.sdk</groupId>
             <artifactId>twilio</artifactId>
             <version>8.3.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <version>2.1.6.RELEASE</version>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>com.azure.spring</groupId>
             <artifactId>azure-spring-boot-starter-keyvault-secrets</artifactId>
@@ -51,6 +57,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.swisstech</groupId>
+            <artifactId>bitly-api-client</artifactId>
+            <version>0.8.0</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -97,6 +108,12 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <name>bintray</name>
+            <url>http://jcenter.bintray.com</url>
         </repository>
     </repositories>
     <pluginRepositories>

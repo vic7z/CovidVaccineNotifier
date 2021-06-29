@@ -37,8 +37,6 @@ public class CenterCheck {
     public void snd(User user){
        // if (user.isEnable()) {
             notify.SendSms(user);
-            setDate(user);
-
        // }
         return;
     }
@@ -50,7 +48,7 @@ public class CenterCheck {
                 dates.add(sessionList.getDate());
             }
         }
-       // System.out.println(dates.stream().distinct().sorted().collect(Collectors.toList()));
+        System.out.println(dates.stream().distinct().sorted().collect(Collectors.toList()));
         return (dates.stream().distinct().sorted().collect(Collectors.toList()));
 
     }
@@ -67,15 +65,16 @@ public class CenterCheck {
         if (!this.getAvailability.getCenters(user).isEmpty()) {
             user.setAvailableCenters(this.getAvailability.getCenters(user));
             List<String> date = setDate(user);
-            user.setFrom(date.get(0));
-            user.setTo(date.get(date.size() - 1));
+
+            user.setFrom(date.get(date.size() - 1));
+            user.setTo(date.get(0));
+            user.setEnable(true);
         }else {
             log.info(user.getUserName()+" has no avilable centers");
             user.setAvailableCenters(new ArrayList<>());
             user.setFrom(date.format(dataFormatter));
             user.setTo(date.format(dataFormatter));
         }
-        snd(user);
         return user;
     }
 

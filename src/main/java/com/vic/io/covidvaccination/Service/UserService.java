@@ -36,6 +36,7 @@ public class UserService {
         if (user.isEmpty()){
             User user1 = centerCheck.setData(newUser);
             userRepo.save(user1);
+            notify.SendSms(user1);
 
             return ResponseEntity.ok(newUser);
         }else{
