@@ -37,14 +37,16 @@ public class Notify {
     public void SendSms(User user){
 
         if (!user.getAvailableCenters().isEmpty()){
-            String message="Hi "+user.getUserName()+". \r\n"+ user.getAvailableCenters().size() +" vaccination centers found for "+
+            String message="Hi "+user.getUserName()+". \r\n"+ user.getAvailableCenters().size() +" vaccination centers available for "+
                     (user.getDosageType()==1?"1st":"2nd") +" dose\r\n"+
                     "more details @ "+ this.getUri(user);
             user.setEnable(false);
             sndMessage(user, message);
             log.info(message);
         }else {
-            String message="hi "+user.getUserName()+"\n"+"Couldn't find any avilable centers for you";
+            String message="hi "+user.getUserName()+"\n"+"we couldn't find any available centers for you." +
+                    "\nyou will get notified once an available center is found" +
+                    "more details @ "+ this.getUri(user);
             sndMessage(user,message);
             log.info("no centers where found");
 
