@@ -3,15 +3,12 @@ package com.vic.io.covidvaccination.Notification;
 import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+import com.vic.io.covidvaccination.Btly.BitlyHelper;
 import com.vic.io.covidvaccination.Model.SessionList;
 import com.vic.io.covidvaccination.Model.User;
 import com.vic.io.covidvaccination.Repository.userRepo;
 import lombok.extern.log4j.Log4j2;
-import net.swisstech.bitly.BitlyClient;
-import net.swisstech.bitly.model.Response;
-import net.swisstech.bitly.model.v3.ShortenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,24 +22,24 @@ public class Notify {
     private final TwilioConfig twilioConfig;
     @Autowired
     private final userRepo userRepo;
-
-    @Value("${btly}")
-    private String btlyAccessTkn;
+    @Autowired
+    private final BitlyHelper btly;
 
     private String uri="https://notifier1.azurewebsites.net/data";
 
     @Autowired
-    public Notify(TwilioConfig twilioConfig, com.vic.io.covidvaccination.Repository.userRepo userRepo) {
+    public Notify(TwilioConfig twilioConfig, com.vic.io.covidvaccination.Repository.userRepo userRepo, BitlyHelper btly) {
         this.twilioConfig = twilioConfig;
         this.userRepo = userRepo;
+        this.btly = btly;
     }
 
     public void SendSms(User user){
 
         if (!user.getAvailableCenters().isEmpty()){
-            String message="Hi "+user.getUserName()+"\n"+ user.getAvailableCenters().size() +" vaccination centers found for "+
-                    (user.getDosageType()==1?"1st":"2nd") +" dose\n"+
-                    "centers :\n" +this.centerDetails(user) +"\nmore details @ "+ this.getUri(user);
+            String message="Hi "+user.getUserName()+". \r\n"+ user.getAvailableCenters().size() +" vaccination centers found for "+
+                    (user.getDosageType()==1?"1st":"2nd") +" dose\r\n"+
+                    "more details @ "+ this.getUri(user);
             user.setEnable(false);
             sndMessage(user, message);
             log.info(message);
@@ -90,19 +87,12 @@ public class Notify {
         if (user.getId()==null){
              user1=userRepo.findByPhoneNo(user1.getPhoneNo()).get();
         }
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.uri)
                 .queryParam("id",user1.getId());
 
-        BitlyClient client = new BitlyClient(btlyAccessTkn);
-        Response<ShortenResponse> resp = client.shorten()
-                .setLongUrl(builder.toUriString())
-                .call();
+        return btly.shorten(builder.toUriString());
 
-        if (resp.status_txt.equalsIgnoreCase("ok")){
-            return resp.data.url;
-        }else {
-            return builder.toUriString();
-        }
 
     }
 

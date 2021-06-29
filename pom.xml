@@ -58,11 +58,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>net.swisstech</groupId>
-            <artifactId>bitly-api-client</artifactId>
-            <version>0.8.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.swisstech</groupId>-->
+<!--            <artifactId>bitly-api-client</artifactId>-->
+<!--            <version>0.8.0</version>-->
+<!--        </dependency>-->
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -110,11 +110,11 @@
             </releases>
         </repository>
 
-        <repository>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>central</id>-->
+<!--            <name>bintray</name>-->
+<!--            <url>http://jcenter.bintray.com</url>-->
+<!--        </repository>-->
     </repositories>
     <pluginRepositories>
         <pluginRepository>
