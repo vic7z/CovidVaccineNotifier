@@ -54,5 +54,5 @@ jobs:
       with:
         app-name: 'potato1'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_afef2bac37904e0a99eb065c331726ed }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e38790d7b27b4ed8b70ccb9564a8a83f }}
         package: '*.jar'
