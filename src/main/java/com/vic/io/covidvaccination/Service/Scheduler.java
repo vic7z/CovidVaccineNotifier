@@ -30,28 +30,34 @@ public class Scheduler {
     }
 
 
-    @Scheduled(fixedDelay = 5_000)
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void check(){
         List<User> userList=userRepo.findAll();
-
         for (User user:userList){
 
             if (user.getAvailableCenters().isEmpty()){
+
                if (this.getData.getCenters(user).isEmpty()){
                    log.info(user.getUserName()+": center empty");
                    user.setEnable(false);
                }else {
                    user.setAvailableCenters(this.getData.getCenters(user));
-                   user.setEnable(true);
                    log.info(user.getUserName()+": updated center    ");
                    snd(user);
 
                }
-                userRepo.save(user);
+//                userRepo.save(user);
+
             }else if (user.isEnable() &&
                     !this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getData.getCenters(user)))
             && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)){
-                snd(user);
+
+               if (!getData.getCenters(user).isEmpty()){
+                   snd(user);
+               }else {
+//                   log.info(user.getUserName()+": user center empty");
+               }
+
             }
 
         }
@@ -63,6 +69,7 @@ public class Scheduler {
         List<String> date = this.centerCheck.setDate(user);
         user.setFrom(date.get(date.size() - 1));
         user.setTo(date.get(0));
+        user.setEnable(true);
         userRepo.save(user);
         this.centerCheck.snd(user);
     }

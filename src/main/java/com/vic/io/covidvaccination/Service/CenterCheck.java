@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +49,8 @@ public class CenterCheck {
                 dates.add(sessionList.getDate());
             }
         }
-        System.out.println(dates.stream().distinct().sorted().collect(Collectors.toList()));
-        return (dates.stream().distinct().sorted().collect(Collectors.toList()));
+        System.out.println(dates.stream().distinct().sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
+        return (dates.stream().distinct().sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
 
     }
 
@@ -60,8 +61,10 @@ public class CenterCheck {
         }
         return centreNames;
     }
+
     public User setData(User user) {
         log.info(user.getUserName());
+
         if (!this.getAvailability.getCenters(user).isEmpty()) {
             user.setAvailableCenters(this.getAvailability.getCenters(user));
             List<String> date = setDate(user);
@@ -71,6 +74,7 @@ public class CenterCheck {
             user.setEnable(true);
         }else {
             log.info(user.getUserName()+" has no avilable centers");
+
             user.setAvailableCenters(new ArrayList<>());
             user.setFrom(date.format(dataFormatter));
             user.setTo(date.format(dataFormatter));

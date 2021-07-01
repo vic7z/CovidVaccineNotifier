@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface userRepo extends MongoRepository<User,String> {
     @Query("{ 'phoneNo' : ?0 }")
     Optional<User> findByPhoneNo(String phoneNo);
-
 }

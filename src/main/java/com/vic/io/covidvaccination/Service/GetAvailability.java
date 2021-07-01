@@ -58,7 +58,6 @@ public class GetAvailability {
 
         //please dont judge
         List<Centers> centersList2 = centersList1.stream().filter(centers1 -> centers1.getPincode() == user.getPincode()).collect(Collectors.toList());
-
         if (centersList2.isEmpty()){
             return centersList1;
         }else {
@@ -69,7 +68,7 @@ public class GetAvailability {
 
     private List<Centers> filterCenter(List<Centers> centersList,User user){
         List<Centers> centersList1= new ArrayList<>();
-        List<SessionList> collect=new ArrayList<>();
+        List<SessionList> collect;
         for (Centers centers1:centersList){
             if (!user.getVaccine().equalsIgnoreCase("any")) {
                 collect = centers1.getSessions()
