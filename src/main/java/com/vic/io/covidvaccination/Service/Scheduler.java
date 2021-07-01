@@ -33,6 +33,7 @@ public class Scheduler {
     @Scheduled(cron = "0 0/10 * * * ?")
     public void check(){
         List<User> userList=userRepo.findAll();
+        log.info("ran");
         for (User user:userList){
 
             if (user.getAvailableCenters().isEmpty()){
