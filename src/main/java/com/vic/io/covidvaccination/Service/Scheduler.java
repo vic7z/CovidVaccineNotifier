@@ -49,16 +49,13 @@ public class Scheduler {
                }
 //                userRepo.save(user);
 
-            }else if (user.isEnable() &&
-                    !this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getData.getCenters(user)))
-            && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date)){
-
-               if (!getData.getCenters(user).isEmpty()){
-                   snd(user);
-               }else {
-//                   log.info(user.getUserName()+": user center empty");
-               }
-
+            }else {
+                if (user.isEnable() && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date) && !getData.getCenters(user).isEmpty()) {
+                        snd(user);
+                }else if(!this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getData.getCenters(user))) && !getData.getCenters(user).isEmpty()){
+                    user.setAvailableCenters(this.getData.getCenters(user));
+                    userRepo.save(user);
+                }
             }
 
         }
