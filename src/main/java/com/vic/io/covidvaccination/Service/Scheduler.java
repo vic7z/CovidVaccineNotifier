@@ -30,7 +30,7 @@ public class Scheduler {
     }
 
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void check(){
         List<User> userList=userRepo.findAll();
         log.info("ran");
