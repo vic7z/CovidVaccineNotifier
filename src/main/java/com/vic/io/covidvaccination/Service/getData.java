@@ -9,6 +9,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class getData {
     private final RestTemplate restTemplate;
-    private final LocalDate date=LocalDate.now();
+//    private final LocalDate date=LocalDate.now();
+    ZonedDateTime now = ZonedDateTime.now();
+    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
+
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 

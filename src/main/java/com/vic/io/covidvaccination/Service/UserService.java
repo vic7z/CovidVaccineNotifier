@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +21,8 @@ public class UserService {
     private final userRepo userRepo;
     private final CenterCheck centerCheck;
     private final Notify notify;
-    private final LocalDate date=LocalDate.now();
+    ZonedDateTime now = ZonedDateTime.now();
+    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 

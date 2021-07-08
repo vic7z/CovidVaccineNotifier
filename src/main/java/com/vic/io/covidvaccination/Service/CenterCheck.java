@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,7 +26,9 @@ import java.util.stream.Collectors;
 public class CenterCheck {
     private final Notify notify;
     private final GetAvailability getAvailability;
-    private final LocalDate date=LocalDate.now();
+    ZonedDateTime now = ZonedDateTime.now();
+    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
+
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private static final Logger log= LoggerFactory.getLogger(CenterCheck.class);

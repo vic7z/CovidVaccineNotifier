@@ -8,6 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -19,7 +21,9 @@ public class Scheduler {
     private final userRepo userRepo;
     private final CenterCheck centerCheck;
 
-    private final LocalDate date=LocalDate.now();
+//    private final LocalDate date=LocalDate.now();
+    ZonedDateTime now = ZonedDateTime.now();
+    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Autowired
@@ -31,9 +35,10 @@ public class Scheduler {
 
 
     @Scheduled(cron = "0 0/5 * * * ?")
+//    @Scheduled(fixedRate = 5000)
     public void check(){
+        log.info(date.format(dataFormatter));
         List<User> userList=userRepo.findAll();
-        log.info("ran");
         for (User user:userList){
 
             if (user.getAvailableCenters().isEmpty()){
@@ -50,7 +55,7 @@ public class Scheduler {
 //                userRepo.save(user);
 
             }else {
-                if (user.isEnable() && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date) && !getData.getCenters(user).isEmpty()) {
+                if (user.isEnable() && LocalDate.parse(user.getTo(), dataFormatter).isBefore(date.toLocalDate()) && !getData.getCenters(user).isEmpty()) {
                         snd(user);
                 }else if(!this.centerCheck.extractName(user.getAvailableCenters()).equals(this.centerCheck.extractName(getData.getCenters(user))) && !getData.getCenters(user).isEmpty()){
                     user.setAvailableCenters(this.getData.getCenters(user));
