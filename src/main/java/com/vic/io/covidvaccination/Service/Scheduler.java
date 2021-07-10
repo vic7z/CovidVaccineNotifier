@@ -1,6 +1,7 @@
 package com.vic.io.covidvaccination.Service;
 
 import com.vic.io.covidvaccination.Model.User;
+import com.vic.io.covidvaccination.Notification.Notify;
 import com.vic.io.covidvaccination.Repository.userRepo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +21,23 @@ public class Scheduler {
     private final GetAvailability getData;
     private final userRepo userRepo;
     private final CenterCheck centerCheck;
+    private final Notify notify;
 
-//    private final LocalDate date=LocalDate.now();
-    ZonedDateTime now = ZonedDateTime.now();
-    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Autowired
-    public Scheduler(GetAvailability getData, userRepo userRepo, CenterCheck centerCheck) {
+    public Scheduler(GetAvailability getData, userRepo userRepo, CenterCheck centerCheck, Notify notify) {
         this.getData = getData;
         this.userRepo = userRepo;
         this.centerCheck = centerCheck;
+        this.notify = notify;
     }
 
 
     @Scheduled(cron = "0 0/5 * * * ?")
 //    @Scheduled(fixedRate = 5000)
     public void check(){
+        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
         log.info(date.format(dataFormatter));
         List<User> userList=userRepo.findAll();
         for (User user:userList){
@@ -74,6 +75,6 @@ public class Scheduler {
         user.setTo(date.get(0));
         user.setEnable(true);
         userRepo.save(user);
-        this.centerCheck.snd(user);
+        this.notify.SendSms(user);
     }
 }

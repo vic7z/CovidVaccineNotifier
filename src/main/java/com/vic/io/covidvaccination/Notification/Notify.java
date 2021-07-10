@@ -20,12 +20,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class Notify {
 
     private final TwilioConfig twilioConfig;
-    @Autowired
     private final userRepo userRepo;
-    @Autowired
     private final BitlyHelper btly;
-
-    private String uri="https://notifier1.azurewebsites.net/data";
 
     @Autowired
     public Notify(TwilioConfig twilioConfig, com.vic.io.covidvaccination.Repository.userRepo userRepo, BitlyHelper btly) {
@@ -67,12 +63,12 @@ public class Notify {
     }
 
 
-    private String centerDetails(User user){
-        return "Name: "+user.getAvailableCenters().get(0).getName()
-                +",Address :"+user.getAvailableCenters().get(0).getAddress()
-                +" ,Pincode :"+user.getAvailableCenters().get(0).getPincode()
-                +" available dosage "+getDosage(user);
-    }
+//    private String centerDetails(User user){
+//        return "Name: "+user.getAvailableCenters().get(0).getName()
+//                +",Address :"+user.getAvailableCenters().get(0).getAddress()
+//                +" ,Pincode :"+user.getAvailableCenters().get(0).getPincode()
+//                +" available dosage "+getDosage(user);
+//    }
 
     private int getDosage(User user) {
         int sum;
@@ -90,7 +86,8 @@ public class Notify {
              user1=userRepo.findByPhoneNo(user1.getPhoneNo()).get();
         }
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.uri)
+        String uri = "https://notifier1.azurewebsites.net/data";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(uri)
                 .queryParam("id",user1.getId());
 
         return btly.shorten(builder.toUriString());

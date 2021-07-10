@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +25,6 @@ import java.util.stream.Collectors;
 public class CenterCheck {
     private final Notify notify;
     private final GetAvailability getAvailability;
-    ZonedDateTime now = ZonedDateTime.now();
-    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
 
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -39,12 +36,6 @@ public class CenterCheck {
         this.getAvailability = getAvailability;
     }
 
-    public void snd(User user){
-       // if (user.isEnable()) {
-            notify.SendSms(user);
-       // }
-        return;
-    }
 
     public List<String> setDate(User user){
         List<String> dates=new ArrayList<>();
@@ -77,8 +68,8 @@ public class CenterCheck {
             user.setTo(date.get(0));
             user.setEnable(true);
         }else {
-            log.info(user.getUserName()+" has no avilable centers");
-
+            ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+            log.info(user.getUserName()+" has no available centers");
             user.setAvailableCenters(new ArrayList<>());
             user.setFrom(date.format(dataFormatter));
             user.setTo(date.format(dataFormatter));

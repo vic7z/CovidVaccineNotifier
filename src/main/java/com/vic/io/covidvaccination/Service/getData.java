@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,14 +18,10 @@ import java.util.stream.Collectors;
 @Service
 public class getData {
     private final RestTemplate restTemplate;
-//    private final LocalDate date=LocalDate.now();
-    ZonedDateTime now = ZonedDateTime.now();
-    ZonedDateTime date = now.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
+
 
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-
-    private String getByDistrict ="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict";
 
     @Autowired
     public getData(RestTemplate restTemplate) {
@@ -36,9 +31,13 @@ public class getData {
     // FIXME: 17/06/21 Null Pointer Exception
 
     private List<Centers> getDetails(String district_id){
-       UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getByDistrict)
+
+        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+        String getByDistrict = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getByDistrict)
               .queryParam("district_id",district_id)
               .queryParam("date",date.format(dataFormatter));
+
         return restTemplate.getForObject(builder.toUriString(), Response.class).getCenters();
    }
 
