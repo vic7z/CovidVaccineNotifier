@@ -54,20 +54,20 @@ public class getData {
    public List<Centers> getAvailability(String district_id){
         List<Centers> centers=getDetails(district_id);
        List<Centers> centersList1=new ArrayList<>();
+        if (centers!=null) {
+            for (Centers centers1 : centers) {
+                List<SessionList> sessionLists = centers1.getSessions();
+                List<SessionList> collect = sessionLists.stream()
+                        .filter(sessionList -> sessionList.getAvailable_capacity() >= 1)
+                        .collect(Collectors.toList());
 
-       for (Centers centers1:centers){
-            List<SessionList> sessionLists=centers1.getSessions();
-            List<SessionList> collect = sessionLists.stream()
-                    .filter(sessionList -> sessionList.getAvailable_capacity() >= 1)
-                    .collect(Collectors.toList());
-
-            if (!collect.isEmpty()){
-                centers1.setSessions(collect);
-                centersList1.add(centers1);
+                if (!collect.isEmpty()) {
+                    centers1.setSessions(collect);
+                    centersList1.add(centers1);
+                }
             }
+
         }
-
-
        return centersList1;
    }
 

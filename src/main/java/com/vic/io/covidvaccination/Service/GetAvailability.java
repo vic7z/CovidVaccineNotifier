@@ -34,35 +34,37 @@ public class GetAvailability {
         List<Centers> centersList1;
 
 
-        centers = getData.getAvailability(user.getDistrict_id());
+        if (!getData.getAvailability(user.getDistrict_id()).isEmpty()) {
+            centers=getData.getAvailability(user.getDistrict_id());
 
-        if(user.getFee().equals("Paid")){
-            centersList= centers;
+            if (user.getFee().equals("Paid")) {
+                centersList = centers;
 
-        }else {
-            centersList= centers.stream()
-                    .parallel()
-                    .filter(centers1 -> centers1.getFee_type().equals("Free"))
-                    .collect(Collectors.toList());
+            } else {
+                centersList = centers.stream()
+                        .parallel()
+                        .filter(centers1 -> centers1.getFee_type().equals("Free"))
+                        .collect(Collectors.toList());
+            }
+
+
+            //log.info(user.getUserName() +" "+centersList);
+
+            if (centersList.isEmpty() && !centers.isEmpty()) {
+                centersList1 = filterCenter(centers, user);
+            } else {
+                centersList1 = filterCenter(centersList, user);
+            }
+
+            //please dont judge
+            List<Centers> centersList2 = centersList1.stream().filter(centers1 -> centers1.getPincode() == user.getPincode()).collect(Collectors.toList());
+            if (centersList2.isEmpty()) {
+                return centersList1;
+            } else {
+                return centersList2;
+            }
         }
-
-
-
-        //log.info(user.getUserName() +" "+centersList);
-
-        if (centersList.isEmpty() && !centers.isEmpty()){
-            centersList1=filterCenter(centers,user);
-        }else {
-            centersList1=filterCenter(centersList,user);
-        }
-
-        //please dont judge
-        List<Centers> centersList2 = centersList1.stream().filter(centers1 -> centers1.getPincode() == user.getPincode()).collect(Collectors.toList());
-        if (centersList2.isEmpty()){
-            return centersList1;
-        }else {
-            return centersList2;
-        }
+        return new ArrayList<>();
 
     }
 
