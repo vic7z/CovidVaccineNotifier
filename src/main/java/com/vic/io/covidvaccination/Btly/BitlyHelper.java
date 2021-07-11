@@ -1,7 +1,9 @@
 package com.vic.io.covidvaccination.Btly;
 
+import com.vic.io.covidvaccination.ErrorHandler.RestTemplateResponseErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,13 +15,19 @@ import java.util.Objects;
 @Service
 public class BitlyHelper {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Value("${btly}")
     private String BITLY_TOKEN;
 
     private static final String endpoint = "https://api-ssl.bitly.com/v4/shorten";
+
+    @Autowired
+    public BitlyHelper(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder
+        .errorHandler(new RestTemplateResponseErrorHandler())
+        .build();
+    }
 
     public String shorten(String longUrl){
         HttpHeaders headers = new HttpHeaders();

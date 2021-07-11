@@ -48,13 +48,22 @@ public class UserService {
 
     }
 
-    public ResponseEntity<Void> deleteByPhone(String s) {
-        User user=userRepo.findByPhoneNo(s).orElse(null);
-        if (user!=null) {
-            userRepo.delete(user);
+//    public ResponseEntity<Void> deleteByPhone(String s) {
+//        User user=userRepo.findByPhoneNo(s).orElse(null);
+//        if (user!=null) {
+//            userRepo.delete(user);
+//            return ResponseEntity.ok().build();
+//        }else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
+    public ResponseEntity<Void> deleteByID(String id) {
+        if (userRepo.findById(id).isPresent()) {
+            userRepo.deleteById(id);
             return ResponseEntity.ok().build();
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
     }
 }

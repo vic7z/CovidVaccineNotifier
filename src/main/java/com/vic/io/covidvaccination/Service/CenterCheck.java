@@ -3,7 +3,6 @@ package com.vic.io.covidvaccination.Service;
 import com.vic.io.covidvaccination.Model.Centers;
 import com.vic.io.covidvaccination.Model.SessionList;
 import com.vic.io.covidvaccination.Model.User;
-import com.vic.io.covidvaccination.Notification.Notify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class CenterCheck {
-    private final Notify notify;
     private final GetAvailability getAvailability;
 
     DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -31,8 +29,7 @@ public class CenterCheck {
     private static final Logger log= LoggerFactory.getLogger(CenterCheck.class);
 
     @Autowired
-    public CenterCheck(Notify notify, GetAvailability getAvailability) {
-        this.notify = notify;
+    public CenterCheck( GetAvailability getAvailability) {
         this.getAvailability = getAvailability;
     }
 
