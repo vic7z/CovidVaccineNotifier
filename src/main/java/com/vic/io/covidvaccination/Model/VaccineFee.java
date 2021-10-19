@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VaccineFee {
-    private String vaccine;
-    private  String fee;
+
+  private String vaccine;
+  private String fee;
 }

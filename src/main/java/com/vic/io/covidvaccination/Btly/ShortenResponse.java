@@ -1,13 +1,14 @@
 package com.vic.io.covidvaccination.Btly;
 
-class  ShortenResponse{
-    private String link;
+class ShortenResponse {
 
-    public String getLink() {
-        return link;
-    }
+  private String link;
 
-    public void setLink(String link) {
-        this.link = link;
-    }
+  public String getLink() {
+    return link;
+  }
+
+  public void setLink(String link) {
+    this.link = link;
+  }
 }

@@ -1,7 +1,6 @@
 package com.vic.io.covidvaccination;
 
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -14,19 +13,17 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 //@EnableCaching
-public class CovidvaccinationApplication  {
+public class CovidvaccinationApplication {
 
-    @Bean
-    public RestTemplateBuilder getRestTemplateBuilder(){
-        return new RestTemplateBuilder();
-    }
+  @Bean
+  public RestTemplateBuilder getRestTemplateBuilder() {
+    return new RestTemplateBuilder();
+  }
 
 
-
-    public static void main(String[] args) {
-        SpringApplication.run(CovidvaccinationApplication.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(CovidvaccinationApplication.class, args);
+  }
 
 
 }

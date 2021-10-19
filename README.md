@@ -13,4 +13,11 @@ Features
 
 You can register [here](https://notifier1.azurewebsites.net/)
 
+**Comply with checkstyle**
+
+This repository follows the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html). 
+Feel free to download formatting presets for your IDE from Google's GitHub repository. 
+We have set up [checkstyle](https://github.com/vic7z/CovidVaccineNotifier/blob/master/checkstyle.xml) 
+to enforce them throughout this project. 
+You can check locally if your changes comply with these guidelines by executing the maven goal `compile`.
 

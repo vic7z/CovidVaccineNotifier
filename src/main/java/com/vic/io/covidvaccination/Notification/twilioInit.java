@@ -8,15 +8,16 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class twilioInit {
-    private final static Logger logger= LoggerFactory.getLogger(twilioInit.class);
+
+  private static final Logger logger = LoggerFactory.getLogger(twilioInit.class);
 
 
-    @Autowired
-    public twilioInit(TwilioConfig configuration) {
-        Twilio.init(
-                configuration.getAccountSid(),
-                configuration.getAuthToken()
-        );
-        logger.info("Twilio init");
-    }
+  @Autowired
+  public twilioInit(TwilioConfig configuration) {
+    Twilio.init(
+        configuration.getAccountSid(),
+        configuration.getAuthToken()
+    );
+    logger.info("Twilio init");
+  }
 }

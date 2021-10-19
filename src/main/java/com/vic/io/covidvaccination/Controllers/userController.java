@@ -1,45 +1,50 @@
 package com.vic.io.covidvaccination.Controllers;
 
+
 import com.vic.io.covidvaccination.Model.Centers;
 import com.vic.io.covidvaccination.Model.User;
 import com.vic.io.covidvaccination.Service.UserService;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
 @RequestMapping("/user")
 public class userController {
-    private final UserService userService;
+
+  private final UserService userService;
 
 
-    @Autowired
-    public userController(UserService userService) {
-        this.userService = userService;
-    }
+  @Autowired
+  public userController(UserService userService) {
+    this.userService = userService;
+  }
 
-    @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user){
-        return userService.setUser(user);
-    }
+  @PostMapping("/add")
+  public ResponseEntity<User> addUser(@RequestBody User user) {
+    return userService.setUser(user);
+  }
 
-    @GetMapping(value = "/get-center",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Centers>> getCenters(@Param(value = "id") String id){
-        return this.userService.getCenter(id);
-    }
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteUser( @Param(value = "id")String id){
-            return this.userService.deleteByID(id);
+  @GetMapping(value = "/get-center", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<Centers>> getCenters(@Param(value = "id") String id) {
+    return this.userService.getCenter(id);
+  }
 
-    }
+  @DeleteMapping("/delete")
+  public ResponseEntity<Void> deleteUser(@Param(value = "id") String id) {
+    return this.userService.deleteByID(id);
 
+  }
 
 
 }
