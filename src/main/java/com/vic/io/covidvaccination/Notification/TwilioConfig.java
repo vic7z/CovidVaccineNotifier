@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TwilioConfig {
-    private String myNumber;
-    private String AuthToken;
-    private String AccountSid;
+
+  private String myNumber;
+  private String AuthToken;
+  private String AccountSid;
 }
