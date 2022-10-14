@@ -21,3 +21,5 @@ We have set up [checkstyle](https://github.com/vic7z/CovidVaccineNotifier/blob/m
 to enforce them throughout this project. 
 You can check locally if your changes comply with these guidelines by executing the maven goal `compile`.
 
+Project no longer maintained 
+
