@@ -1,7 +1,7 @@
 # About
 [![CodeQL](https://github.com/vic7z/CovidVaccineNotifier/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/vic7z/CovidVaccineNotifier/actions/workflows/codeql-analysis.yml)
 
-
+<!-- helloo -->
 
 A simple spring boot application that can track vaccine availability and automatically sends a SMS alert with the avilable centers
 
